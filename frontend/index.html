@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f6f0e7" />
+    <meta
+      name="description"
+      content="독서 시간을 기록하고 내 습관을 이해하는 AI 독서 비서"
+    />
+    <title>Pageful — 나의 독서 습관 AI 비서</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./config.js" defer></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Pageful 홈"
+        ><span class="brand-mark">P</span>pageful</a
+      >
+      <nav aria-label="주요 메뉴" class="topnav">
+        <a href="#dashboard">독서 요약</a>
+        <a href="#records">독서 기록</a>
+        <a href="#assistant">AI 비서</a>
+        <a href="#conversations">대화 기록</a>
+      </nav>
+      <button
+        id="copy-user-id"
+        class="profile"
+        type="button"
+        title="과제용 사용자 ID 복사"
+        aria-label="과제용 사용자 ID 복사"
+      >
+        나
+      </button>
+    </header>
+
+    <main id="top" class="page-content">
+      <div
+        id="app-status"
+        class="status-banner"
+        role="status"
+        aria-live="polite"
+      >
+        서비스를 준비하고 있습니다.
+      </div>
+
+      <section class="welcome" id="dashboard">
+        <div>
+          <p class="eyebrow">MY READING COMPANION</p>
+          <h1>오늘도 한 페이지,<br /><em>나를 채우는 시간.</em></h1>
+          <p class="intro">
+            읽은 시간을 기록하고 나만의 독서 흐름을 살펴보세요.
+          </p>
+        </div>
+        <div class="welcome-aside">
+          <span>“</span>
+          <p>책장을 넘길 때마다<br />새로운 하루가 열립니다.</p>
+        </div>
+      </section>
+
+      <section class="stats-grid" aria-label="독서 요약">
+        <article class="stat-card featured">
+          <span class="stat-icon">◷</span>
+          <div>
+            <p>이번 달 독서 시간</p>
+            <strong id="month-total">—</strong
+            ><small id="month-comparison">기록을 불러오는 중</small>
+          </div>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon soft">▤</span>
+          <div>
+            <p>전체 기록</p>
+            <strong id="record-count">—</strong
+            ><small id="record-period">기록을 불러오는 중</small>
+          </div>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon soft">✦</span>
+          <div>
+            <p>최근 추세</p>
+            <strong id="trend-value">—</strong
+            ><small id="trend-detail">최근 7개 기록 기준</small>
+          </div>
+        </article>
+      </section>
+
+      <div class="dashboard-grid">
+        <section class="panel chart-panel" aria-labelledby="chart-title">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">READING RHYTHM</p>
+              <h2 id="chart-title">최근 7일 독서 흐름</h2>
+            </div>
+            <span class="panel-tag">단위: 분</span>
+          </div>
+          <div
+            id="week-chart"
+            class="chart"
+            role="img"
+            aria-label="최근 7일 독서 시간"
+          ></div>
+          <p id="chart-note" class="panel-note">
+            독서 기록을 추가하면 흐름을 볼 수 있어요.
+          </p>
+        </section>
+
+        <section class="panel insight-panel" aria-labelledby="insight-title">
+          <p class="eyebrow">YOUR READING NOTE</p>
+          <h2 id="insight-title">나의 독서 요약</h2>
+          <p id="insight-copy" class="insight-copy">기록을 불러오고 있어요.</p>
+          <dl class="insight-list">
+            <div>
+              <dt>전체 독서 시간</dt>
+              <dd id="total-time">—</dd>
+            </div>
+            <div>
+              <dt>기록당 평균</dt>
+              <dd id="average-time">—</dd>
+            </div>
+            <div>
+              <dt>가장 많이 읽은 날</dt>
+              <dd id="best-day">—</dd>
+            </div>
+          </dl>
+          <a class="outline-button" href="#assistant"
+            >AI 비서에게 물어보기 <span>→</span></a
+          >
+        </section>
+      </div>
+
+      <div class="work-grid">
+        <section
+          class="panel records-panel"
+          id="records"
+          aria-labelledby="records-title"
+        >
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">READING LOG</p>
+              <h2 id="records-title">독서 기록</h2>
+            </div>
+            <span class="panel-tag">날짜별 독서 시간</span>
+          </div>
+          <form id="record-form" class="record-form">
+            <input id="record-id" type="hidden" />
+            <label>날짜<input id="record-date" type="date" required /></label>
+            <label
+              >독서 시간 (분)<input
+                id="record-value"
+                type="number"
+                min="1"
+                step="1"
+                placeholder="예: 30"
+                required
+            /></label>
+            <label class="memo-field"
+              >메모<input
+                id="record-memo"
+                type="text"
+                maxlength="500"
+                placeholder="읽은 책이나 간단한 메모"
+            /></label>
+            <div class="form-actions">
+              <button id="record-submit" class="primary-button" type="submit">
+                기록 추가</button
+              ><button
+                id="record-cancel"
+                class="quiet-button"
+                type="button"
+                hidden
+              >
+                수정 취소
+              </button>
+            </div>
+          </form>
+          <p
+            id="record-feedback"
+            class="feedback"
+            role="status"
+            aria-live="polite"
+          ></p>
+          <div id="record-list" class="record-list">
+            <p class="empty-state">기록을 불러오는 중입니다.</p>
+          </div>
+        </section>
+
+        <div class="right-stack">
+          <section
+            class="panel chat-panel"
+            id="assistant"
+            aria-labelledby="chat-title"
+          >
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">PAGEFUL ASSISTANT</p>
+                <h2 id="chat-title">AI 독서 비서</h2>
+              </div>
+              <button id="new-chat" class="quiet-button" type="button">
+                새 대화
+              </button>
+            </div>
+            <p class="chat-intro">독서 기록을 바탕으로 답변해 드릴게요.</p>
+            <div id="chat-messages" class="chat-messages" aria-live="polite">
+              <div class="message assistant">
+                <span class="mini-mark">P</span>
+                <p>
+                  안녕하세요. “최근 독서 습관이 좋아지고 있어?”처럼 물어보세요.
+                </p>
+              </div>
+            </div>
+            <form id="chat-form" class="chat-form">
+              <label class="sr-only" for="chat-input">독서 습관 질문</label
+              ><input
+                id="chat-input"
+                type="text"
+                maxlength="1000"
+                placeholder="독서 습관에 대해 물어보세요"
+                required
+              /><button id="chat-submit" type="submit" aria-label="질문 보내기">
+                ↑
+              </button>
+            </form>
+            <p
+              id="chat-feedback"
+              class="feedback"
+              role="status"
+              aria-live="polite"
+            ></p>
+          </section>
+
+          <section
+            class="panel conversations-panel"
+            id="conversations"
+            aria-labelledby="conversations-title"
+          >
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">PAST CONVERSATIONS</p>
+                <h2 id="conversations-title">대화 기록</h2>
+              </div>
+            </div>
+            <div id="conversation-list" class="conversation-list">
+              <p class="empty-state">대화를 불러오는 중입니다.</p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">pageful · 한 페이지씩 쌓이는 나의 독서 습관</footer>
+  </body>
+</html>

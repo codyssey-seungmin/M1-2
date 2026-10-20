@@ -1,0 +1,15 @@
+# Python virtual environments and generated files
+.venv/
+__pycache__/
+*.py[cod]
+
+# Local secrets; share only the example file
+.env
+.env.*
+!.env.example
+backend/service-account.json
+backend/firebase-service-account.json
+*service-account*.json
+*firebase-adminsdk*.json
+frontend/node_modules/
+frontend/dist/

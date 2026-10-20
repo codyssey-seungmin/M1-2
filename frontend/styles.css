@@ -1,0 +1,784 @@
+:root {
+  --paper: #f6f0e7;
+  --card: #fffdf9;
+  --ink: #3d3731;
+  --muted: #84796d;
+  --line: #e6d9ca;
+  --accent: #b46f55;
+  --accent-dark: #92543e;
+  --olive: #879076;
+  --shadow: 0 14px 35px rgba(82, 59, 42, 0.055);
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 84% 0%, #fffaf4 0, transparent 35rem),
+    var(--paper);
+  color: var(--ink);
+  font-family: Georgia, "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+button,
+input {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.topbar {
+  min-height: 76px;
+  padding: 15px max(5vw, 25px);
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  border-bottom: 1px solid #e8ddcf;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+}
+.brand-mark,
+.mini-mark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fffaf3;
+}
+.brand-mark {
+  width: 32px;
+  height: 32px;
+  font-size: 19px;
+}
+.topnav {
+  display: flex;
+  gap: 25px;
+  margin-left: 15px;
+}
+.topnav a {
+  color: var(--muted);
+  font-family: "Noto Sans KR", "Malgun Gothic", sans-serif;
+  font-size: 12px;
+}
+.topnav a:hover,
+.topnav a:focus-visible {
+  color: var(--accent-dark);
+}
+.profile {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  margin-left: auto;
+  border: 0;
+  border-radius: 50%;
+  background: var(--olive);
+  color: white;
+  font-family: "Noto Sans KR", "Malgun Gothic", sans-serif;
+  font-size: 12px;
+}
+.profile:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.page-content {
+  width: min(1160px, calc(100% - 44px));
+  margin: auto;
+  padding: 28px 0 70px;
+}
+.status-banner {
+  padding: 11px 15px;
+  margin-bottom: 40px;
+  border: 1px solid #e7d7c2;
+  border-radius: 8px;
+  background: #f2e7d7;
+  color: #765f4b;
+  font-family: "Noto Sans KR", "Malgun Gothic", sans-serif;
+  font-size: 12px;
+}
+.status-banner.success {
+  background: #edf0e6;
+  border-color: #dce5d1;
+  color: #526045;
+}
+.status-banner.error {
+  background: #f8e9e5;
+  border-color: #eecdc1;
+  color: #8f4736;
+}
+.welcome {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 25px;
+  margin-bottom: 42px;
+}
+.eyebrow {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font:
+    700 10px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+  letter-spacing: 0.18em;
+}
+h1 {
+  margin-bottom: 16px;
+  font-size: clamp(38px, 5.5vw, 62px);
+  font-weight: 400;
+  letter-spacing: -0.06em;
+  line-height: 1.18;
+}
+h1 em {
+  color: var(--accent);
+  font-style: normal;
+}
+.intro {
+  margin: 0;
+  color: var(--muted);
+  font:
+    13px/1.8 "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.welcome-aside {
+  min-width: 220px;
+  padding: 15px 22px;
+  border-left: 1px solid var(--accent);
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.55;
+}
+.welcome-aside span {
+  display: block;
+  height: 18px;
+  color: var(--accent);
+  font-size: 40px;
+  line-height: 0.7;
+}
+.welcome-aside p {
+  margin: 7px 0 0;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.stat-card,
+.panel {
+  border: 1px solid rgba(218, 201, 183, 0.82);
+  border-radius: 12px;
+  background: rgba(255, 253, 249, 0.9);
+  box-shadow: var(--shadow);
+}
+.stat-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  min-height: 130px;
+  padding: 24px;
+}
+.stat-card.featured {
+  border-color: #e7d5c0;
+  background: #ecddcb;
+}
+.stat-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-size: 21px;
+}
+.stat-icon.soft {
+  background: #f2e5d8;
+  color: var(--accent);
+}
+.stat-card p {
+  margin: 2px 0 10px;
+  color: var(--muted);
+  font:
+    11px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.stat-card strong {
+  display: block;
+  font-size: 28px;
+  font-weight: 400;
+}
+.stat-card small {
+  display: block;
+  margin-top: 7px;
+  color: var(--muted);
+  font:
+    10px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 18px;
+}
+.work-grid {
+  display: grid;
+  grid-template-columns: 1.18fr 1fr;
+  gap: 18px;
+  margin-top: 18px;
+}
+.right-stack {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+.panel {
+  padding: 27px 28px;
+}
+.panel-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 23px;
+}
+h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+}
+.panel-tag {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  color: var(--muted);
+  font:
+    10px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+  white-space: nowrap;
+}
+.panel-note {
+  margin: 19px 0 0;
+  color: var(--muted);
+  font:
+    11px/1.6 "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.chart {
+  height: 190px;
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+}
+.chart-axis {
+  width: 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 0 29px;
+  color: #ad9f91;
+  font:
+    9px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.chart-bars {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+.chart-column {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 29px;
+  min-width: 0;
+  text-align: center;
+}
+.chart-track {
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-bottom: 1px solid var(--line);
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 39px,
+    #eee5da 40px
+  );
+}
+.chart-bar {
+  width: min(34px, 70%);
+  min-height: 0;
+  border-radius: 7px 7px 0 0;
+  background: #d7c6b5;
+}
+.chart-bar.highlight {
+  background: var(--accent);
+}
+.chart-column span {
+  align-self: end;
+  padding-bottom: 2px;
+  color: var(--muted);
+  font:
+    10px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.chart-empty .chart-bar {
+  height: 0 !important;
+}
+.insight-panel {
+  background: #899176;
+  color: #fffaf3;
+  border-color: #899176;
+}
+.insight-panel .eyebrow {
+  color: #ead4b4;
+}
+.insight-copy {
+  margin: 18px 0 20px;
+  color: #fbf9ed;
+  line-height: 1.7;
+  font:
+    12px/1.8 "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.insight-list {
+  margin: 0 0 20px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.insight-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 0;
+  font:
+    11px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.insight-list dt {
+  color: #eee9dc;
+}
+.insight-list dd {
+  margin: 0;
+  font-weight: 700;
+}
+.outline-button {
+  display: block;
+  padding: 11px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 7px;
+  text-align: center;
+  font:
+    11px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.outline-button span {
+  float: right;
+}
+.record-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+  padding: 17px;
+  border: 1px solid #ede2d5;
+  border-radius: 9px;
+  background: #fbf6ef;
+}
+.record-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font:
+    11px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.record-form input {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 11px;
+  border: 1px solid #ddcebe;
+  border-radius: 6px;
+  outline: 0;
+  background: #fffefa;
+  color: var(--ink);
+  font-size: 12px;
+}
+.record-form input:focus,
+.chat-form input:focus {
+  border-color: var(--accent);
+}
+.memo-field,
+.form-actions {
+  grid-column: 1/-1;
+}
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.primary-button,
+.quiet-button {
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 6px;
+  font:
+    11px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.primary-button {
+  background: var(--accent);
+  color: #fff;
+}
+.primary-button:hover {
+  background: var(--accent-dark);
+}
+.quiet-button {
+  background: #f1e7db;
+  color: var(--accent-dark);
+}
+.quiet-button:hover {
+  background: #e8d8c7;
+}
+.feedback {
+  min-height: 20px;
+  margin: 10px 0;
+  color: var(--accent-dark);
+  font:
+    11px/1.5 "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.record-list {
+  border-top: 1px solid var(--line);
+}
+.record-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+.record-date {
+  min-width: 57px;
+  padding: 7px 4px;
+  border-radius: 5px;
+  background: #f0e7dc;
+  text-align: center;
+  color: var(--accent-dark);
+  font:
+    10px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.record-body {
+  flex: 1;
+  min-width: 0;
+}
+.record-body strong {
+  display: block;
+  font:
+    600 12px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.record-body small {
+  display: block;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  font:
+    10px/1.5 "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.record-actions {
+  display: flex;
+  gap: 4px;
+}
+.record-actions button,
+.conversation-item button {
+  border: 0;
+  background: transparent;
+  color: var(--accent-dark);
+  font:
+    10px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.record-actions button:hover,
+.conversation-item button:hover {
+  text-decoration: underline;
+}
+.empty-state {
+  padding: 19px 0;
+  color: var(--muted);
+  font:
+    11px/1.6 "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.chat-panel .panel-heading {
+  align-items: center;
+  margin-bottom: 9px;
+}
+.chat-intro {
+  margin: 0 0 17px;
+  color: var(--muted);
+  font:
+    11px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.chat-messages {
+  min-height: 172px;
+  max-height: 330px;
+  overflow: auto;
+  padding: 5px 2px 8px;
+}
+.message {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 10px 0;
+}
+.mini-mark {
+  width: 23px;
+  height: 23px;
+  font-size: 13px;
+}
+.message p {
+  max-width: 85%;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 3px 10px 10px 10px;
+  background: #f1e9df;
+  color: #5b5148;
+  font:
+    11px/1.75 "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.message.user {
+  justify-content: flex-end;
+}
+.message.user p {
+  border-radius: 10px 3px 10px 10px;
+  background: #e7d4c2;
+  color: #49382c;
+}
+.message.loading p {
+  color: var(--muted);
+  font-style: italic;
+}
+.chat-form {
+  display: flex;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.chat-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 8px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: #f8f2ea;
+  outline: 0;
+  color: var(--ink);
+  font:
+    11px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.chat-form button {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 17px;
+}
+.chat-form button:disabled,
+.primary-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.chat-panel .feedback {
+  margin-bottom: 0;
+}
+.conversation-list {
+  display: grid;
+  gap: 0;
+}
+.conversation-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.conversation-item:last-child {
+  border-bottom: 0;
+}
+.conversation-open {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+.conversation-open strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ink);
+  font:
+    600 11px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.conversation-open small {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font:
+    10px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.conversation-item.active {
+  background: #fbf5ec;
+}
+.footer {
+  padding: 25px;
+  color: #a99c8d;
+  text-align: center;
+  font:
+    10px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+@media (max-width: 900px) {
+  .topbar {
+    gap: 20px;
+  }
+  .topnav {
+    margin-left: 0;
+    gap: 14px;
+  }
+  .dashboard-grid,
+  .work-grid {
+    grid-template-columns: 1fr;
+  }
+  .right-stack {
+    grid-template-columns: 1fr 1fr;
+  }
+  .welcome-aside {
+    display: none;
+  }
+}
+@media (max-width: 680px) {
+  .topbar {
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    padding: 14px 18px;
+  }
+  .topnav {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    gap: 5px;
+  }
+  .topnav a {
+    font-size: 10px;
+  }
+  .page-content {
+    width: calc(100% - 30px);
+    padding-top: 20px;
+  }
+  .status-banner {
+    margin-bottom: 28px;
+  }
+  .welcome {
+    margin-bottom: 29px;
+  }
+  .stats-grid,
+  .right-stack {
+    grid-template-columns: 1fr;
+  }
+  .stat-card {
+    min-height: auto;
+    padding: 18px;
+  }
+  .panel {
+    padding: 22px 19px;
+  }
+  .chart {
+    height: 175px;
+  }
+  .record-form {
+    grid-template-columns: 1fr;
+  }
+  .memo-field,
+  .form-actions {
+    grid-column: auto;
+  }
+  .record-item {
+    gap: 8px;
+  }
+  .record-date {
+    min-width: 47px;
+  }
+  .record-actions {
+    flex-direction: column;
+  }
+}
