@@ -182,7 +182,7 @@ Start: uvicorn main:app --app-dir backend --host 0.0.0.0 --port $PORT
 
 Render 환경변수: 제공한 Blueprint는 현재 사용하는 코디세이 설정(`AI_PROVIDER=codyssey`, `CODYSSEY_BASE_URL`)을 기본값으로 두며, `CODYSSEY_API_KEY`, `CODYSSEY_MODEL`은 Render에서 직접 입력해야 합니다. 공식 OpenAI를 사용할 경우 `AI_PROVIDER=openai`로 바꾸고 `OPENAI_API_KEY`, `OPENAI_MODEL`을 직접 추가합니다. 두 경우 모두 `FIREBASE_SERVICE_ACCOUNT_JSON`, `ALLOWED_ORIGINS`(Vercel 도메인)가 필요합니다. 서비스 계정 JSON과 AI 키는 비밀 환경변수에 저장합니다. 배포 후 `/health`와 `/docs`를 확인합니다. 무료 티어를 쓰는 경우 첫 요청에 시간이 걸릴 수 있어 프론트엔드에 안내 문구가 있습니다.
 
-121건의 시연 기록을 넣은 뒤 코디세이 `gpt-5-mini`가 1200토큰 한도에서 `finish_reason=length`와 빈 답변을 반환한 사례가 있었습니다. 이에 코디세이 응답 상한을 4000토큰으로 높였습니다. 추론 설정과 대화 맥락 구성은 변경하지 않았으며, 배포 후 동일한 질문으로 실제 응답을 다시 확인해야 합니다. 답변이 여전히 비면 서버 로그에는 종료 사유와 토큰 수만 남기며, 질문·답변·키는 기록하지 않습니다. 과금 방지를 위해 테스트 요청은 필요한 만큼만 진행합니다.
+121건의 시연 기록을 넣은 뒤 코디세이 `gpt-5-mini`가 1200토큰 한도에서 `finish_reason=length`와 빈 답변을 반환한 사례가 있었습니다. 이에 코디세이 응답 상한을 4000토큰으로 높였습니다. 추론 설정과 대화 맥락 구성은 변경하지 않았습니다. 변경 후 배포 사이트에서 사용자가 AI 답변이 정상 표시되고 새로고침 후에도 대화가 유지되는 것을 확인했습니다. 답변이 다시 비면 서버 로그에는 종료 사유와 토큰 수만 남기며, 질문·답변·키는 기록하지 않습니다. 과금 방지를 위해 테스트 요청은 필요한 만큼만 진행합니다.
 
 ### Vercel 프론트엔드
 
