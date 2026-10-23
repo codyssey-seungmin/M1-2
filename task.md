@@ -187,7 +187,7 @@
 
 순서: GitHub → Render 백엔드(`/health`, `/docs`) → Vercel 프론트엔드(`API_BASE_URL`) → Firebase 승인 도메인·Render CORS 등록 → 배포 환경 전체 흐름 검증. Render와 Vercel 모두 과제 필수이며, 아래 실제 배포 항목은 완료 전까지 체크하지 않는다.
 
-- [ ] GitHub에 백엔드·프론트엔드 코드 push
+- [x] GitHub에 백엔드·프론트엔드 코드 push (`codyssey-seungmin/M1-2`, `main`)
 - [ ] Render Web Service 생성
 - [ ] Render 환경변수 등록
 - [ ] Render 배포 성공 확인
