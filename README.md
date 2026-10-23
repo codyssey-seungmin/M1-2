@@ -188,7 +188,7 @@ Render 환경변수: 제공한 Blueprint는 현재 사용하는 코디세이 설
 
 Vercel 도메인을 Firebase Authentication의 승인된 도메인과 Render의 `ALLOWED_ORIGINS`에 추가합니다. Firestore 규칙은 이미 배포했으며, 규칙을 다시 배포할 때는 `firebase deploy --only firestore:rules --project pageful-bb7e2`를 사용합니다. 규칙 배포는 콘솔의 기존 규칙을 덮어쓰므로 수정 시 로컬 파일과 콘솔 내용을 함께 확인합니다.
 
-배포 순서: GitHub에 코드 게시 → Render 백엔드 배포·`/docs` 확인(완료) → Vercel 프론트엔드 배포(완료) → 실제 Vercel 도메인을 Firebase 승인 도메인과 Render `ALLOWED_ORIGINS`에 등록 → 배포 사이트에서 익명 인증·기록·채팅 재확인. 현재 도메인 허용과 배포 환경 전체 흐름 검증은 미완료입니다.
+배포 순서: GitHub에 코드 게시 → Render 백엔드 배포·`/docs` 확인(완료) → Vercel 프론트엔드 배포(완료) → 실제 Vercel 도메인을 Firebase 승인 도메인과 Render `ALLOWED_ORIGINS`에 등록(완료) → 배포 사이트에서 익명 인증·기록·채팅 재확인(사용자 확인). 제출 시연용 브라우저 계정의 100개 이상 데이터 및 스크린샷은 별도 준비가 필요합니다.
 
 ## 배포 URL
 
