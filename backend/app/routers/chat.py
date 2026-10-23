@@ -78,7 +78,7 @@ def chat(payload: ChatInput, uid: str = Depends(current_uid)):
             response = client.chat.completions.create(
                 model=model,
                 messages=[{"role": "system", "content": system_instructions(summary)}, *input_messages],
-                max_tokens=1200,
+                max_tokens=4000,
             )
             answer = (response.choices[0].message.content or "").strip() if response.choices else ""
             if not answer:
