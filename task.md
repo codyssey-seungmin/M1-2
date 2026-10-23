@@ -188,17 +188,20 @@
 순서: GitHub → Render 백엔드(`/health`, `/docs`) → Vercel 프론트엔드(`API_BASE_URL`) → Firebase 승인 도메인·Render CORS 등록 → 배포 환경 전체 흐름 검증. Render와 Vercel 모두 과제 필수이며, 아래 실제 배포 항목은 완료 전까지 체크하지 않는다.
 
 - [x] GitHub에 백엔드·프론트엔드 코드 push (`codyssey-seungmin/M1-2`, `main`)
-- [ ] Render Web Service 생성
-- [ ] Render 환경변수 등록
-- [ ] Render 배포 성공 확인
-- [ ] 배포 백엔드 `/docs` 접근 확인
-- [ ] Vercel 프로젝트 생성
-- [ ] Vercel 환경변수 등록
-- [ ] Vercel 배포 성공 확인
-- [ ] Vercel 도메인을 CORS 허용 목록에 추가
-- [ ] 배포 환경에서 익명 인증 확인
-- [ ] 배포 환경에서 Firestore 저장 확인
+- [x] Render Web Service 생성 (Singapore, `https://m1-2-pw8w.onrender.com`)
+- [x] Render 환경변수 등록 (값의 전체 유효성은 배포 기능 검증에서 재확인)
+- [x] Render 배포 성공 확인 (Render 로그의 `Your service is live`)
+- [x] 배포 백엔드 `/docs` 접근 확인 (사용자 브라우저에서 확인)
+- [ ] 배포 백엔드 `/health` 응답 확인
+- [x] Vercel 프로젝트 생성 (`pageful-web`, 저장소 루트, Other 프리셋)
+- [x] Vercel 환경변수 등록 (7개 입력, 값의 전체 유효성은 배포 기능 검증에서 재확인)
+- [x] Vercel 배포 성공 확인 (Vercel 성공 화면 및 미리보기)
+- [x] Vercel 도메인을 Firebase Authentication 승인된 도메인에 추가 (`pageful-web.vercel.app`, 콘솔 목록 확인)
+- [x] Vercel 도메인을 CORS 허용 목록에 추가 (Render 재배포 Live, 프론트엔드 API 연결 확인)
+- [x] 배포 환경에서 익명 인증 확인 (새 익명 사용자로 기록 0개 표시)
+- [x] 배포 환경에서 Firestore 저장 확인 (사용자가 기록 1건 추가 후 새로고침에도 유지 확인)
 - [ ] 배포 환경에서 AI 채팅 확인
+- [ ] 배포 AI 빈 응답 재검증 (출력 한도 400→1200 및 종료 사유 진단 로그 수정 후 재배포 필요)
 
 ## 12. README 및 제출 자료
 
@@ -209,9 +212,9 @@
 - [x] API 목록 작성
 - [x] 환경변수 목록 작성
 - [x] 로컬 실행 방법 작성
-- [ ] 프론트엔드 배포 URL 작성
-- [ ] 백엔드 API URL 작성
-- [ ] Swagger URL 작성
+- [x] 프론트엔드 배포 URL 작성 (`https://pageful-web.vercel.app/`)
+- [x] 백엔드 API URL 작성
+- [x] Swagger URL 작성
 - [x] 첫 요청 지연 안내 작성
 - [x] 개인정보 및 테스트 데이터 안내 작성
 - [ ] 데이터 요약이 보이는 채팅 화면 캡처
@@ -227,6 +230,7 @@
 - [ ] 코디세이 경유 GPT 호출이 제출 기준의 `OpenAI API` 사용으로 인정되는지 확인한다. 기준이 공식 API 직접 호출이면 `AI_PROVIDER=openai`로 전환한다.
 - [ ] 사용자별 데이터가 분리된다.
 - [ ] API 키와 서비스 계정 키가 노출되지 않는다.
+- [ ] 화면 캡처에 일부 노출된 Codyssey API 키와 Firebase 서비스 계정 키 교체 후 이전 키 폐기
 - [ ] Render와 Vercel 배포 URL이 접속된다.
 - [ ] Swagger UI가 열리고 API 문서가 확인된다.
 - [ ] README와 제출 스크린샷이 완성되어 있다.

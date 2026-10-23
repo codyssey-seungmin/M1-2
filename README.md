@@ -180,21 +180,23 @@ Start: uvicorn main:app --app-dir backend --host 0.0.0.0 --port $PORT
 
 Render 환경변수: 제공한 Blueprint는 현재 사용하는 코디세이 설정(`AI_PROVIDER=codyssey`, `CODYSSEY_BASE_URL`)을 기본값으로 두며, `CODYSSEY_API_KEY`, `CODYSSEY_MODEL`은 Render에서 직접 입력해야 합니다. 공식 OpenAI를 사용할 경우 `AI_PROVIDER=openai`로 바꾸고 `OPENAI_API_KEY`, `OPENAI_MODEL`을 직접 추가합니다. 두 경우 모두 `FIREBASE_SERVICE_ACCOUNT_JSON`, `ALLOWED_ORIGINS`(Vercel 도메인)가 필요합니다. 서비스 계정 JSON과 AI 키는 비밀 환경변수에 저장합니다. 배포 후 `/health`와 `/docs`를 확인합니다. 무료 티어를 쓰는 경우 첫 요청에 시간이 걸릴 수 있어 프론트엔드에 안내 문구가 있습니다.
 
+코디세이 `gpt-5-mini`의 빈 답변을 방지하기 위해 응답 한도를 1200토큰으로 설정했습니다. 답변이 여전히 비면 서버 로그에는 종료 사유와 토큰 수만 남기며, 질문·답변·키는 기록하지 않습니다. 과금 방지를 위해 테스트 요청은 필요한 만큼만 진행합니다.
+
 ### Vercel 프론트엔드
 
 같은 GitHub 저장소를 연결하고 루트의 [vercel.json](vercel.json)을 사용합니다. `API_BASE_URL`에 Render API 주소를 입력하고, `FIREBASE_API_KEY`, `FIREBASE_AUTH_DOMAIN`, `FIREBASE_PROJECT_ID`, `FIREBASE_STORAGE_BUCKET`, `FIREBASE_MESSAGING_SENDER_ID`, `FIREBASE_APP_ID`를 Firebase Web 앱 설정값으로 입력합니다. 환경변수 수정 시 다시 빌드해 배포합니다.
 
 Vercel 도메인을 Firebase Authentication의 승인된 도메인과 Render의 `ALLOWED_ORIGINS`에 추가합니다. Firestore 규칙은 이미 배포했으며, 규칙을 다시 배포할 때는 `firebase deploy --only firestore:rules --project pageful-bb7e2`를 사용합니다. 규칙 배포는 콘솔의 기존 규칙을 덮어쓰므로 수정 시 로컬 파일과 콘솔 내용을 함께 확인합니다.
 
-배포 순서: GitHub에 코드 게시 → Render 백엔드 배포·`/docs` 확인 → Vercel 프론트엔드 배포·`API_BASE_URL` 설정 → 실제 Vercel 도메인을 Firebase 승인 도메인과 Render `ALLOWED_ORIGINS`에 등록 → 배포 사이트에서 익명 인증·기록·채팅 재확인. 이 과정은 아직 진행 전입니다.
+배포 순서: GitHub에 코드 게시 → Render 백엔드 배포·`/docs` 확인(완료) → Vercel 프론트엔드 배포(완료) → 실제 Vercel 도메인을 Firebase 승인 도메인과 Render `ALLOWED_ORIGINS`에 등록 → 배포 사이트에서 익명 인증·기록·채팅 재확인. 현재 도메인 허용과 배포 환경 전체 흐름 검증은 미완료입니다.
 
 ## 배포 URL
 
 | 항목 | URL |
 |---|---|
-| 프론트엔드 | 배포 후 입력 |
-| 백엔드 API | 배포 후 입력 |
-| Swagger UI | 배포 후 입력 |
+| 프론트엔드 | https://pageful-web.vercel.app/ |
+| 백엔드 API | https://m1-2-pw8w.onrender.com |
+| Swagger UI | https://m1-2-pw8w.onrender.com/docs |
 
 ## 제출 스크린샷
 

@@ -133,7 +133,7 @@ class APIContractTests(unittest.TestCase):
         self.assertEqual(kwargs["model"], "test-gpt-model")
         self.assertIn("최근 7개 기록 평균: 20분", kwargs["messages"][0]["content"])
         self.assertEqual(kwargs["messages"][0]["role"], "system")
-        self.assertEqual(kwargs["max_tokens"], 400)
+        self.assertEqual(kwargs["max_tokens"], 1200)
         self.assertEqual(ref.set.call_args.args[0]["messages"][1]["role"], "assistant")
 
     @patch.dict("os.environ", {

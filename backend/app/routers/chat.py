@@ -1,3 +1,4 @@
+import logging
 import os
 from datetime import datetime, timezone
 
@@ -11,6 +12,7 @@ from ..services import conversations_ref, read_owned_document, user_summary
 
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
+logger = logging.getLogger(__name__)
 
 
 def system_instructions(summary: dict) -> str:
@@ -76,9 +78,18 @@ def chat(payload: ChatInput, uid: str = Depends(current_uid)):
             response = client.chat.completions.create(
                 model=model,
                 messages=[{"role": "system", "content": system_instructions(summary)}, *input_messages],
-                max_tokens=400,
+                max_tokens=1200,
             )
             answer = (response.choices[0].message.content or "").strip() if response.choices else ""
+            if not answer:
+                usage = response.usage
+                details = getattr(usage, "completion_tokens_details", None)
+                logger.warning(
+                    "AI response empty: finish_reason=%s completion_tokens=%s reasoning_tokens=%s",
+                    response.choices[0].finish_reason if response.choices else None,
+                    getattr(usage, "completion_tokens", None),
+                    getattr(details, "reasoning_tokens", None),
+                )
         else:
             response = OpenAI(api_key=api_key, base_url="https://api.openai.com/v1", timeout=35.0).responses.create(
                 model=model,
