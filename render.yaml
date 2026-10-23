@@ -6,10 +6,14 @@ services:
     buildCommand: pip install -r backend/requirements.txt
     startCommand: uvicorn main:app --app-dir backend --host 0.0.0.0 --port $PORT
     envVars:
-      - key: OPENAI_API_KEY
+      - key: AI_PROVIDER
+        value: codyssey
+      - key: CODYSSEY_API_KEY
         sync: false
-      - key: OPENAI_MODEL
+      - key: CODYSSEY_MODEL
         sync: false
+      - key: CODYSSEY_BASE_URL
+        value: https://copa.codyssey.kr/v1
       - key: FIREBASE_SERVICE_ACCOUNT_JSON
         sync: false
       - key: ALLOWED_ORIGINS

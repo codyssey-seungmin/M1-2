@@ -24,15 +24,27 @@
         <a href="#assistant">AI 비서</a>
         <a href="#conversations">대화 기록</a>
       </nav>
-      <button
-        id="copy-user-id"
-        class="profile"
-        type="button"
-        title="과제용 사용자 ID 복사"
-        aria-label="과제용 사용자 ID 복사"
-      >
-        나
-      </button>
+      <div class="profile-area">
+        <button
+          id="copy-user-id"
+          class="profile"
+          type="button"
+          title="과제용 사용자 ID 확인"
+          aria-label="과제용 사용자 ID 확인"
+          aria-expanded="false"
+          aria-controls="user-id-panel"
+        >
+          나
+        </button>
+        <div id="user-id-panel" class="user-id-panel" hidden>
+          <label for="user-id-value">내 사용자 ID</label>
+          <input id="user-id-value" type="text" readonly />
+          <button id="copy-user-id-value" type="button">ID 복사</button>
+          <p id="user-id-feedback" role="status" aria-live="polite">
+            ID를 선택해 직접 복사할 수도 있습니다.
+          </p>
+        </div>
+      </div>
     </header>
 
     <main id="top" class="page-content">
@@ -181,9 +193,23 @@
             role="status"
             aria-live="polite"
           ></p>
+          <div class="record-toolbar">
+            <label for="record-month">월별 보기</label>
+            <select id="record-month">
+              <option value="">전체 기간</option>
+            </select>
+            <span
+              id="record-visible-count"
+              role="status"
+              aria-live="polite"
+            ></span>
+          </div>
           <div id="record-list" class="record-list">
             <p class="empty-state">기록을 불러오는 중입니다.</p>
           </div>
+          <button id="record-more" class="record-more" type="button" hidden>
+            더 보기
+          </button>
         </section>
 
         <div class="right-stack">
@@ -205,9 +231,8 @@
             <div id="chat-messages" class="chat-messages" aria-live="polite">
               <div class="message assistant">
                 <span class="mini-mark">P</span>
-                <p>
-                  안녕하세요. “최근 독서 습관이 좋아지고 있어?”처럼 물어보세요.
-                </p>
+                <!-- prettier-ignore -->
+                <p>안녕하세요. “최근 독서 습관이 좋아지고 있어?”처럼 물어보세요.</p>
               </div>
             </div>
             <form id="chat-form" class="chat-form">

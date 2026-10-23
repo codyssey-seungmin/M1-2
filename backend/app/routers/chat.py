@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from openai import OpenAI, OpenAIError
 
 from ..auth import current_uid
-from ..config import openai_model
+from ..config import ai_provider, codyssey_base_url, openai_model
 from ..models import ChatInput
 from ..services import conversations_ref, read_owned_document, user_summary
 
@@ -18,6 +18,7 @@ def system_instructions(summary: dict) -> str:
         facts = "저장된 독서 기록이 없습니다. 기록 기반 수치를 제시하지 마세요."
     else:
         monthly = ", ".join(f"{month}: {value}분" for month, value in summary["monthly_totals"].items())
+        trend_detail = f" ({summary['trend_percent']}%)" if summary["trend_percent"] is not None else ""
         facts = (
             f"기간: {summary['period']['start']} ~ {summary['period']['end']}\n"
             f"기록 수: {summary['count']}개\n총 시간: {summary['total_value']}분\n"
@@ -26,7 +27,7 @@ def system_instructions(summary: dict) -> str:
             f"최소 단일 기록: {summary['min_value']}분\n"
             f"최근 7개 기록 평균: {summary['recent_average']}분\n"
             f"직전 7개 기록 평균: {summary['previous_average']}분\n"
-            f"추세: {summary['trend']} ({summary['trend_percent']}%)\n"
+            f"추세: {summary['trend']}{trend_detail}\n"
             f"이번 달: {summary['this_month_total']}분\n지난달: {summary['last_month_total']}분\n"
             f"월별 합계: {monthly}"
         )
@@ -41,8 +42,15 @@ def system_instructions(summary: dict) -> str:
 
 @router.post("")
 def chat(payload: ChatInput, uid: str = Depends(current_uid)):
-    api_key = os.getenv("OPENAI_API_KEY", "").strip()
-    model = openai_model()
+    provider = ai_provider()
+    if provider == "codyssey":
+        api_key = os.getenv("CODYSSEY_API_KEY", "").strip()
+        model = os.getenv("CODYSSEY_MODEL", "").strip()
+    elif provider == "openai":
+        api_key = os.getenv("OPENAI_API_KEY", "").strip()
+        model = openai_model()
+    else:
+        raise HTTPException(status_code=503, detail="AI 제공자 설정이 올바르지 않습니다.")
     if not api_key or not model:
         raise HTTPException(status_code=503, detail="AI 서비스 설정이 필요합니다.")
 
@@ -63,14 +71,23 @@ def chat(payload: ChatInput, uid: str = Depends(current_uid)):
     input_messages = [{"role": item["role"], "content": item["content"]} for item in previous_messages[-10:]]
     input_messages.append({"role": "user", "content": question})
     try:
-        response = OpenAI(api_key=api_key, timeout=35.0).responses.create(
-            model=model,
-            instructions=system_instructions(summary),
-            input=input_messages,
-            max_output_tokens=400,
-            store=False,
-        )
-        answer = (response.output_text or "").strip()
+        if provider == "codyssey":
+            client = OpenAI(api_key=api_key, base_url=codyssey_base_url(), timeout=35.0)
+            response = client.chat.completions.create(
+                model=model,
+                messages=[{"role": "system", "content": system_instructions(summary)}, *input_messages],
+                max_tokens=400,
+            )
+            answer = (response.choices[0].message.content or "").strip() if response.choices else ""
+        else:
+            response = OpenAI(api_key=api_key, base_url="https://api.openai.com/v1", timeout=35.0).responses.create(
+                model=model,
+                instructions=system_instructions(summary),
+                input=input_messages,
+                max_output_tokens=400,
+                store=False,
+            )
+            answer = (response.output_text or "").strip()
     except OpenAIError as exc:
         raise HTTPException(status_code=502, detail="AI 답변을 가져오지 못했습니다. 잠시 후 다시 시도해 주세요.") from exc
     if not answer:

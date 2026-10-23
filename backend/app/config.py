@@ -13,3 +13,11 @@ def allowed_origins() -> list[str]:
 
 def openai_model() -> str:
     return os.getenv("OPENAI_MODEL", "").strip()
+
+
+def ai_provider() -> str:
+    return os.getenv("AI_PROVIDER", "openai").strip().lower()
+
+
+def codyssey_base_url() -> str:
+    return os.getenv("CODYSSEY_BASE_URL", "https://copa.codyssey.kr/v1").strip().rstrip("/")

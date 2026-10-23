@@ -94,12 +94,15 @@ p {
 .topnav a:focus-visible {
   color: var(--accent-dark);
 }
+.profile-area {
+  position: relative;
+  margin-left: auto;
+}
 .profile {
   width: 34px;
   height: 34px;
   display: grid;
   place-items: center;
-  margin-left: auto;
   border: 0;
   border-radius: 50%;
   background: var(--olive);
@@ -110,6 +113,54 @@ p {
 .profile:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+.user-id-panel {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 12px);
+  right: 0;
+  width: min(320px, calc(100vw - 28px));
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  font:
+    13px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.user-id-panel[hidden] {
+  display: none;
+}
+.user-id-panel label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.user-id-panel input {
+  width: 100%;
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 14px;
+}
+.user-id-panel button {
+  min-height: 40px;
+  margin-top: 10px;
+  padding: 0 13px;
+  border: 0;
+  border-radius: 7px;
+  background: var(--olive);
+  color: #fff;
+}
+.user-id-panel p {
+  margin: 9px 0 0;
+  color: var(--muted);
+  font-size: 12px;
 }
 .page-content {
   width: min(1160px, calc(100% - 44px));
@@ -494,8 +545,53 @@ h2 {
     "Malgun Gothic",
     sans-serif;
 }
+.record-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin: 12px 0;
+  color: var(--muted);
+  font:
+    11px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.record-toolbar select {
+  min-height: 44px;
+  max-width: 100%;
+  padding: 6px 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+}
+.record-toolbar span {
+  margin-left: auto;
+}
 .record-list {
   border-top: 1px solid var(--line);
+}
+.record-more {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 13px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #f8f0e7;
+  color: var(--accent-dark);
+  font:
+    12px "Noto Sans KR",
+    "Malgun Gothic",
+    sans-serif;
+}
+.record-more[hidden] {
+  display: none;
+}
+.record-more:hover {
+  background: #f1e4d6;
 }
 .record-item {
   display: flex;
@@ -586,6 +682,9 @@ h2 {
   align-items: flex-start;
   gap: 8px;
   margin: 10px 0;
+}
+.chat-messages > .message:first-child {
+  margin-top: 2px;
 }
 .mini-mark {
   width: 23px;
@@ -717,10 +816,10 @@ h2 {
   }
   .dashboard-grid,
   .work-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .right-stack {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .welcome-aside {
     display: none;
@@ -732,6 +831,13 @@ h2 {
     gap: 10px 18px;
     padding: 14px 18px;
   }
+  .brand {
+    font-size: 23px;
+  }
+  .profile {
+    width: 40px;
+    height: 40px;
+  }
   .topnav {
     order: 3;
     width: 100%;
@@ -739,7 +845,10 @@ h2 {
     gap: 5px;
   }
   .topnav a {
-    font-size: 10px;
+    display: inline-flex;
+    align-items: center;
+    min-height: 42px;
+    font-size: 12px;
   }
   .page-content {
     width: calc(100% - 30px);
@@ -747,26 +856,72 @@ h2 {
   }
   .status-banner {
     margin-bottom: 28px;
+    font-size: 13px;
   }
   .welcome {
     margin-bottom: 29px;
   }
+  h1 {
+    font-size: clamp(34px, 9vw, 42px);
+  }
+  .intro {
+    font-size: 14px;
+  }
   .stats-grid,
   .right-stack {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .stat-card {
     min-height: auto;
     padding: 18px;
   }
+  .stat-card p,
+  .stat-card small {
+    font-size: 12px;
+  }
   .panel {
     padding: 22px 19px;
+  }
+  h2 {
+    font-size: 22px;
+  }
+  .panel-note,
+  .insight-copy,
+  .empty-state,
+  .chat-intro {
+    font-size: 13px;
   }
   .chart {
     height: 175px;
   }
+  .chart-axis,
+  .chart-column span {
+    font-size: 11px;
+  }
+  .insight-list div,
+  .outline-button {
+    font-size: 13px;
+  }
+  .outline-button {
+    min-height: 44px;
+  }
   .record-form {
     grid-template-columns: 1fr;
+  }
+  .record-form label,
+  .record-body strong,
+  .conversation-open strong {
+    font-size: 13px;
+  }
+  .record-form input,
+  .chat-form input {
+    min-height: 44px;
+    font-size: 16px;
+  }
+  .primary-button,
+  .quiet-button {
+    min-height: 44px;
+    font-size: 13px;
   }
   .memo-field,
   .form-actions {
@@ -776,9 +931,39 @@ h2 {
     gap: 8px;
   }
   .record-date {
-    min-width: 47px;
+    min-width: 56px;
+    font-size: 11px;
+  }
+  .record-body small,
+  .conversation-open small {
+    font-size: 11px;
   }
   .record-actions {
     flex-direction: column;
+  }
+  .record-actions button,
+  .conversation-item button {
+    min-width: 44px;
+    min-height: 38px;
+    font-size: 12px;
+  }
+  .message p {
+    font-size: 13px;
+  }
+  .chat-form button {
+    width: 44px;
+    height: 44px;
+  }
+  .footer {
+    font-size: 12px;
+  }
+}
+@media (max-width: 380px) {
+  .chart-panel .panel-heading {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chart-panel .panel-heading > div {
+    width: 100%;
   }
 }

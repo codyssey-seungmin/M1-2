@@ -5,10 +5,27 @@ from fastapi import HTTPException
 
 from app.models import ConversationInput, ReadingInput
 from app.routers import conversations, data
-from app.services import read_owned_document, valid_document_id
+from app.services import list_records, read_owned_document, valid_document_id
 
 
 class HandlerTests(unittest.TestCase):
+    @patch("app.services.records_ref")
+    def test_record_list_sorts_same_day_by_creation_time(self, records_ref):
+        def snapshot(document_id, created_at, day="2026-10-20"):
+            item = MagicMock(id=document_id)
+            item.to_dict.return_value = {"date": day, "value": 30, "created_at": created_at}
+            return item
+
+        records_ref.return_value.stream.return_value = [
+            snapshot("newer-id", "2026-10-20T09:00:00+00:00"),
+            snapshot("older-id", "2026-10-20T10:00:00+00:00"),
+            snapshot("previous-day", "2026-10-19T23:00:00+00:00", "2026-10-19"),
+        ]
+        self.assertEqual(
+            [item["id"] for item in list_records("reader-a")],
+            ["older-id", "newer-id", "previous-day"],
+        )
+
     @patch("app.routers.data.serialize_doc", return_value={"id": "record-1"})
     @patch("app.routers.data.records_ref")
     def test_data_create_update_delete_use_the_users_collection(self, records_ref, serialize_doc):

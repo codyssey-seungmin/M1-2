@@ -1,7 +1,6 @@
 from collections import defaultdict
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from statistics import mean
-from zoneinfo import ZoneInfo
 
 from fastapi import HTTPException
 
@@ -30,9 +29,16 @@ def serialize_doc(snapshot):
     return {"id": snapshot.id, **data}
 
 
+def record_order_key(item: dict) -> tuple[str, str, str]:
+    created_at = item.get("created_at") or ""
+    if isinstance(created_at, datetime):
+        created_at = created_at.isoformat()
+    return (item["date"], created_at, item.get("id", ""))
+
+
 def list_records(uid: str) -> list[dict]:
     items = [serialize_doc(doc) for doc in records_ref(uid).stream()]
-    return sorted(items, key=lambda item: (item["date"], item["id"]), reverse=True)
+    return sorted(items, key=record_order_key, reverse=True)
 
 
 def read_owned_document(collection, document_id: str):
@@ -43,7 +49,7 @@ def read_owned_document(collection, document_id: str):
 
 
 def calculate_summary(records: list[dict], today: date | None = None) -> dict:
-    today = today or datetime.now(ZoneInfo("Asia/Seoul")).date()
+    today = today or datetime.now(timezone(timedelta(hours=9))).date()
     if not records:
         return {
             "period": {"start": None, "end": None}, "count": 0, "total_value": 0,
@@ -55,7 +61,7 @@ def calculate_summary(records: list[dict], today: date | None = None) -> dict:
             "monthly_totals": {},
         }
 
-    chronological = sorted(records, key=lambda item: (item["date"], item.get("id", "")))
+    chronological = sorted(records, key=record_order_key)
     values = [float(item["value"]) for item in chronological]
     daily = defaultdict(float)
     monthly = defaultdict(float)

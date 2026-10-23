@@ -1,10 +1,14 @@
 import { initializeApp } from "@firebase/app";
 import { getAuth, onAuthStateChanged, signInAnonymously } from "@firebase/auth";
+import { getRecordView } from "./record-view.mjs";
 
 const config = window.APP_CONFIG || {};
+const RECORD_PAGE_SIZE = 10;
 const state = {
   user: null,
   records: [],
+  recordMonth: "",
+  recordVisibleCount: RECORD_PAGE_SIZE,
   summary: null,
   conversations: [],
   conversationId: null,
@@ -61,6 +65,7 @@ function setFormsDisabled(disabled) {
   for (const selector of [
     "#record-form input",
     "#record-form button",
+    "#record-month",
     "#chat-form input",
     "#chat-form button",
     "#new-chat",
@@ -175,6 +180,28 @@ function renderChart(series) {
 
 function renderRecords() {
   const list = $("record-list");
+  const monthSelect = $("record-month");
+  let view = getRecordView(
+    state.records,
+    state.recordMonth,
+    state.recordVisibleCount,
+  );
+  if (state.recordMonth !== view.month) {
+    state.recordMonth = "";
+    state.recordVisibleCount = RECORD_PAGE_SIZE;
+    view = getRecordView(state.records, "", RECORD_PAGE_SIZE);
+  }
+  monthSelect.replaceChildren(new Option("전체 기간", ""));
+  for (const month of view.months) {
+    const [year, monthNumber] = month.split("-");
+    monthSelect.add(new Option(`${year}년 ${Number(monthNumber)}월`, month));
+  }
+  monthSelect.value = state.recordMonth;
+  $("record-visible-count").textContent =
+    `${view.total}개 중 ${view.visible.length}개 표시`;
+  const more = $("record-more");
+  more.hidden = view.remaining === 0;
+  more.textContent = `더 보기 (${view.remaining}개 남음)`;
   list.replaceChildren();
   if (!state.records.length) {
     const empty = document.createElement("p");
@@ -183,7 +210,7 @@ function renderRecords() {
     list.append(empty);
     return;
   }
-  for (const record of state.records) {
+  for (const record of view.visible) {
     const item = document.createElement("article");
     item.className = "record-item";
     const date = document.createElement("span");
@@ -452,18 +479,48 @@ function start() {
   $("record-date").value = localDate();
   $("record-form").addEventListener("submit", saveRecord);
   $("record-cancel").addEventListener("click", resetRecordForm);
+  $("record-month").addEventListener("change", (event) => {
+    state.recordMonth = event.target.value;
+    state.recordVisibleCount = RECORD_PAGE_SIZE;
+    renderRecords();
+  });
+  $("record-more").addEventListener("click", () => {
+    state.recordVisibleCount += RECORD_PAGE_SIZE;
+    renderRecords();
+  });
   $("chat-form").addEventListener("submit", sendChat);
   $("new-chat").addEventListener("click", newConversation);
-  $("copy-user-id").addEventListener("click", async () => {
+  $("copy-user-id").addEventListener("click", () => {
+    if (!state.user) return;
+    const panel = $("user-id-panel");
+    panel.hidden = !panel.hidden;
+    $("copy-user-id").setAttribute("aria-expanded", String(!panel.hidden));
+    if (!panel.hidden) {
+      $("user-id-value").value = state.user.uid;
+      $("user-id-value").select();
+    }
+  });
+  $("copy-user-id-value").addEventListener("click", async () => {
     if (!state.user) return;
     try {
       await navigator.clipboard.writeText(state.user.uid);
-      setStatus("과제용 사용자 ID를 복사했습니다.", "success");
+      $("user-id-feedback").textContent = "ID를 복사했습니다.";
     } catch {
-      setStatus(
-        "사용자 ID를 복사하지 못했습니다. HTTPS 또는 localhost에서 다시 시도해 주세요.",
-        "error",
-      );
+      $("user-id-value").select();
+      $("user-id-feedback").textContent =
+        "자동 복사가 차단됐습니다. 선택된 ID를 직접 복사해 주세요.";
+    }
+  });
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".profile-area")) {
+      $("user-id-panel").hidden = true;
+      $("copy-user-id").setAttribute("aria-expanded", "false");
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      $("user-id-panel").hidden = true;
+      $("copy-user-id").setAttribute("aria-expanded", "false");
     }
   });
   setFormsDisabled(true);
