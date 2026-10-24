@@ -26,6 +26,14 @@
       </nav>
       <div class="profile-area">
         <button
+          id="theme-toggle"
+          class="theme-toggle"
+          type="button"
+          aria-pressed="false"
+        >
+          다크 모드
+        </button>
+        <button
           id="copy-user-id"
           class="profile"
           type="button"
@@ -153,7 +161,12 @@
               <p class="eyebrow">READING LOG</p>
               <h2 id="records-title">독서 기록</h2>
             </div>
-            <span class="panel-tag">날짜별 독서 시간</span>
+            <div class="panel-actions">
+              <button id="export-records" class="export-button" type="button" disabled>
+                JSON 내보내기
+              </button>
+              <span class="panel-tag">날짜별 독서 시간</span>
+            </div>
           </div>
           <form id="record-form" class="record-form">
             <input id="record-id" type="hidden" />

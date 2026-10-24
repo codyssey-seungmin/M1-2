@@ -1,9 +1,11 @@
 import { initializeApp } from "@firebase/app";
 import { getAuth, onAuthStateChanged, signInAnonymously } from "@firebase/auth";
+import { serializeRecords } from "./export-records.mjs";
 import { getRecordView } from "./record-view.mjs";
 
 const config = window.APP_CONFIG || {};
 const RECORD_PAGE_SIZE = 10;
+const THEME_STORAGE_KEY = "pageful-theme";
 const state = {
   user: null,
   records: [],
@@ -15,6 +17,34 @@ const state = {
   messages: [],
 };
 const $ = (id) => document.getElementById(id);
+
+function applyTheme(theme) {
+  const dark = theme === "dark";
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  $("theme-toggle").textContent = dark ? "라이트 모드" : "다크 모드";
+  $("theme-toggle").setAttribute("aria-pressed", String(dark));
+  document.querySelector('meta[name="theme-color"]').content = dark
+    ? "#211e1b"
+    : "#f6f0e7";
+}
+
+function initializeTheme() {
+  try {
+    applyTheme(localStorage.getItem(THEME_STORAGE_KEY));
+  } catch {
+    applyTheme("light");
+  }
+}
+
+function toggleTheme() {
+  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  applyTheme(next);
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, next);
+  } catch {
+    // 저장소가 차단된 브라우저에서는 현재 화면에만 테마를 적용합니다.
+  }
+}
 
 function localDate() {
   const date = new Date();
@@ -264,6 +294,7 @@ async function refreshReading() {
   ]);
   state.records = records;
   state.summary = summary;
+  $("export-records").disabled = false;
   renderRecords();
   renderSummary();
 }
@@ -387,6 +418,20 @@ async function refreshConversations() {
   renderConversations();
 }
 
+function exportRecords() {
+  if (!state.user || $("export-records").disabled) return;
+  const content = serializeRecords(state.records, new Date().toISOString());
+  const url = URL.createObjectURL(new Blob([content], { type: "application/json;charset=utf-8" }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `pageful-reading-records-${localDate()}.json`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  setFeedback("record-feedback", `내 기록 ${state.records.length}건의 JSON 다운로드를 시작했습니다.`);
+}
+
 async function loadConversation(id) {
   try {
     const conversation = await api(
@@ -476,8 +521,11 @@ async function loadAll() {
 }
 
 function start() {
+  initializeTheme();
+  $("theme-toggle").addEventListener("click", toggleTheme);
   $("record-date").value = localDate();
   $("record-form").addEventListener("submit", saveRecord);
+  $("export-records").addEventListener("click", exportRecords);
   $("record-cancel").addEventListener("click", resetRecordForm);
   $("record-month").addEventListener("change", (event) => {
     state.recordMonth = event.target.value;
@@ -546,6 +594,10 @@ function start() {
       auth,
       async (user) => {
         if (!user) {
+          state.user = null;
+          state.records = [];
+          $("export-records").disabled = true;
+          setFormsDisabled(true);
           setStatus("사용자 공간을 준비하고 있습니다.");
           try {
             await signInAnonymously(auth);
@@ -554,7 +606,15 @@ function start() {
           }
           return;
         }
+        if (state.user?.uid !== user.uid) {
+          state.records = [];
+          state.summary = null;
+          state.conversations = [];
+          state.conversationId = null;
+          state.messages = [];
+        }
         state.user = user;
+        $("export-records").disabled = true;
         setFormsDisabled(false);
         await loadAll();
       },
