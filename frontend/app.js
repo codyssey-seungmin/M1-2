@@ -21,8 +21,11 @@ const $ = (id) => document.getElementById(id);
 function applyTheme(theme) {
   const dark = theme === "dark";
   document.documentElement.dataset.theme = dark ? "dark" : "light";
-  $("theme-toggle").textContent = dark ? "라이트 모드" : "다크 모드";
-  $("theme-toggle").setAttribute("aria-pressed", String(dark));
+  const themeToggle = $("theme-toggle");
+  const nextThemeLabel = dark ? "라이트 모드로 전환" : "다크 모드로 전환";
+  themeToggle.setAttribute("aria-label", nextThemeLabel);
+  themeToggle.title = nextThemeLabel;
+  themeToggle.setAttribute("aria-pressed", String(dark));
   document.querySelector('meta[name="theme-color"]').content = dark
     ? "#211e1b"
     : "#f6f0e7";

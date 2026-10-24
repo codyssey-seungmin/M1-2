@@ -111,6 +111,23 @@ p {
   color: var(--ink);
   font: 11px "Noto Sans KR", "Malgun Gothic", sans-serif;
 }
+.theme-toggle {
+  width: 36px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+.theme-icon {
+  width: 20px;
+  height: 20px;
+}
+.theme-icon-sun,
+html[data-theme="dark"] .theme-icon-moon {
+  display: none;
+}
+html[data-theme="dark"] .theme-icon-sun {
+  display: block;
+}
 .theme-toggle:hover,
 .export-button:hover:not(:disabled) {
   border-color: var(--accent);
@@ -978,8 +995,8 @@ html[data-theme="dark"] .footer {
     height: 40px;
   }
   .theme-toggle {
+    width: 40px;
     min-height: 40px;
-    font-size: 12px;
   }
   .topnav {
     order: 3;
